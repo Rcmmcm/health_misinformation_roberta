@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Health Misinformation Detector</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: linear-gradient(to right, #74ebd5, #9face6);
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        h1 {
+            color: #222;
+        }
+
+        textarea, input {
+            width: 60%;
+            padding: 12px;
+            margin: 10px;
+            border-radius: 8px;
+            border: none;
+            font-size: 14px;
+        }
+
+        button {
+            padding: 10px 25px;
+            font-size: 16px;
+            border-radius: 8px;
+            background-color: #333;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        .card {
+            margin-top: 30px;
+            width: 60%;
+            margin-left: auto;
+            margin-right: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0px 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .fake {
+            color: red;
+        }
+
+        .real {
+            color: green;
+        }
+
+        hr {
+            margin: 20px 0;
+        }
+
+        .label {
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<h1>Health Misinformation Detector</h1>
+
+<form method="POST">
+    <textarea name="text" placeholder="Enter article text..."></textarea><br>
+    <input type="text" name="url" placeholder="Enter source URL..."><br>
+    <button type="submit">Check</button>
+</form>
+
+{% if result %}
+<div class="card">
+
+    <h2 class="{{ 'fake' if result == 'FAKE NEWS' else 'real' }}">
+        Prediction: {{ result }}
+    </h2>
+
+    <p><span class="label">Credibility Score:</span> {{ cred }}</p>
+    <p><span class="label">Confidence:</span> {{ "%.2f"|format(confidence * 100) }}%</p>
+
+    <hr>
+
+    <h3>Input Details</h3>
+    <p><span class="label">Statement:</span> {{ text }}</p>
+    <p><span class="label">Source URL:</span> {{ url }}</p>
+
+    <hr>
+
+    <h3>Model Performance</h3>
+    <p>Accuracy: {{ accuracy }}</p>
+    <p>Precision: {{ precision }}</p>
+    <p>Recall: {{ recall }}</p>
+    <p>F1 Score: {{ f1 }}</p>
+
+    <hr>
+
+    <h3>Explanation</h3>
+    <p>{{ explanation }}</p>
+
+</div>
+{% endif %}
+
+</body>
+</html>
