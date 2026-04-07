@@ -7,6 +7,9 @@ import torch.nn.functional as F
 
 app = Flask(__name__)
 
+# ==========================
+# CREDIBILITY FUNCTION
+# ==========================
 def get_credibility_score(url):
     domain = urlparse(url).netloc.lower()
 
@@ -19,6 +22,9 @@ def get_credibility_score(url):
     else:
         return 0.3
 
+# ==========================
+# MODEL
+# ==========================
 class Model(nn.Module):
     def __init__(self):
         super().__init__()
@@ -32,10 +38,18 @@ class Model(nn.Module):
         x = torch.cat((pooled, credibility), dim=1)
         return self.fc(x)
 
+# ==========================
+# LOAD TRAINED MODEL
+# ==========================
 model = Model()
-tokenizer = RobertaTokenizer.from_pretrained("roberta-base")
+model.load_state_dict(torch.load("model.pth", map_location=torch.device("cpu")))
 model.eval()
 
+tokenizer = RobertaTokenizer.from_pretrained("roberta-base")
+
+# ==========================
+# ROUTE
+# ==========================
 @app.route("/", methods=["GET", "POST"])
 def home():
 
